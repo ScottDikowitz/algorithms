@@ -1,0 +1,208 @@
+'use strict';
+
+var NodeObj = require('./nodeObj.js').NodeObj;
+var Root = require('./nodeObj.js').Root;
+
+// obj merge - shallow
+
+function mergeObj(obj1, obj2){
+    if (typeof obj1 === 'undefined'){
+        obj1 = {a: 'hello', b:'goodbye'};
+    }
+    if (typeof obj2 === 'undefined'){
+        obj2 = {c: 'howdy', d: 'world'};
+    }
+    var obj3 = {};
+    Object.keys(obj1).forEach(function(item){
+        obj3[item] = obj1[item];
+    });
+
+    Object.keys(obj2).forEach(function(item){
+        obj3[item] = obj2[item];
+    });
+
+    return obj3;
+}
+
+// array.flatten
+// [0, 14, 9, 3, 4, [1, 4, 5], 0];
+Array.prototype.flatten = function(){
+
+    var result = [];
+
+    this.forEach(function(el){
+        if (Array.isArray(el)){
+            result = result.concat([el.flatten()]);
+        } else {
+            result = result.concat([el]);
+        }
+    });
+    return result;
+};
+// obj deep-dup
+
+// {1: '2'}
+var deepDup = function(obj){
+    var copy = {};
+
+    Object.keys(obj).forEach(function(key){
+        if (typeof obj[key] === 'object'){
+            copy[key] = deepDup(obj[key]);
+        } else {
+            copy[key] = obj[key];
+        }
+
+    });
+
+    return copy;
+};
+
+var obj = {a: {b: 'c', h: {i: 'j'}}, b: 'e'};
+
+var obj2 = deepDup(obj);
+// merge-sort
+Array.prototype.mergeSort = function(merge){
+    if (this.length <= 1){
+        return this;
+    }
+
+    if (typeof merge === 'undefined'){
+        merge = function(left, right){
+            var result = [];
+            while (left.length > 0 && right.length > 0){
+                if (left[0] < right[0]){
+                    result.push(left.shift());
+                } else {
+                    result.push(right.shift());
+                }
+            }
+            return result.concat(left).concat(right);
+        };
+    }
+
+    var half = this.length / 2;
+
+    var leftHalf = this.slice(0, half);
+    var rightHalf = this.slice(half);
+
+    var leftSorted = leftHalf.mergeSort(merge);
+    var rightSorted = rightHalf.mergeSort(merge);
+
+
+    return merge(leftSorted, rightSorted);
+};
+
+
+// Quicksort
+Array.prototype.quickSort = function(comparator){
+    if (this.length < 2){
+        return this;
+    }
+
+    var randomIndex = Math.floor(Math.random() * this.length);
+    var pivot = this[randomIndex];
+    var left = [];
+    var right = [];
+    if (typeof comparator === 'undefined'){
+        comparator = function(a, p){
+            return a < p;
+        };
+    }
+
+    this.forEach(function(el, i){
+        if (i !== randomIndex){
+            if (comparator(el, pivot)){
+                left.push(el);
+            } else {
+                right.push(el);
+            }
+        }
+    });
+
+    return left.quickSort(comparator).concat(pivot).concat(right.quickSort(comparator));
+
+};
+
+// Bubblesort
+function bubblesort(arr){
+    for (var i = 0; i < arr.length; i++){
+        for (var j = 0; j < arr.length - 1 - i; j++){
+            arr[j] = arr[j] > arr[j + 1] ? [arr[j+1], arr[j+1] = arr[j]][0] : arr[j];
+        }
+    }
+
+    return arr;
+}
+
+// binary search - Bsearch
+function binarySearch(arr, target){
+    if (arr.length === 0){
+        return null;
+    }
+    var mid = Math.floor(arr.length / 2);
+
+    if (arr[mid] === target){
+        return mid;
+    } else if (target < arr[mid]) {
+        return binarySearch(arr.slice(0, mid), target);
+    } else {
+        var rec = binarySearch(arr.slice(mid + 1), target);
+        if (rec === null){
+            return null;
+        }
+        return mid + rec + 1;
+    }
+
+}
+
+// DFS - Depth First Search
+function dfs(target, node){
+    if (typeof node === 'undefined'){
+        node = Root;
+    }
+    if (node.value === target){
+        return true;
+    } else if (node.children.length === 0){
+        return false;
+    }
+
+    for (var i = 0; i < node.children.length; i++){
+        if (dfs(target, node.children[i])){
+            return true;
+        }
+    }
+
+    return false;
+}
+// BFS - Breadth First Search
+function bfs(target, node){
+    if (typeof node === 'undefined'){
+        node = Root;
+    }
+
+    var stack = [Root];
+    var current;
+
+    var pushToStack = function(child){
+        stack.push(child);
+    };
+
+    while (stack.length > 0){
+        current = stack.shift();
+        if (current.value === target){
+            return true;
+        }
+        current.children.forEach(pushToStack);
+    }
+    return false;
+
+}
+
+module.exports = {
+    merge: mergeObj,
+    deepDup: deepDup,
+    bubbleSort: bubblesort,
+    binarySearch: binarySearch,
+    dfs: dfs,
+    bfs: bfs
+};
