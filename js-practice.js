@@ -32,7 +32,7 @@ Array.prototype.flatten = function(){
 
     this.forEach(function(el){
         if (Array.isArray(el)){
-            result = result.concat([el.flatten()]);
+            result = result.concat(el.flatten());
         } else {
             result = result.concat([el]);
         }
