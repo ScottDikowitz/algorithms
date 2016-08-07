@@ -40,4 +40,37 @@ var parent;
 
 })();
 
-module.exports = {NodeObj: NodeObj, Root: parent};
+class BSTNode {
+    constructor(options){
+        this.parent = options.parent;
+        this.left = options.left;
+        this.right = options.right;
+        this.value = options.value;
+    }
+
+    setLeftAndRight(left, right){
+        this.left = left;
+        this.right = right;
+    }
+}
+var bstParent;
+(function generateBSTNodes(){
+    bstParent = new BSTNode({parent: null, left: null, right: null, value: 10});
+    var left1 = new BSTNode({parent: bstParent, left: null, right: null, value: 4});
+    var right1 = new BSTNode({parent: bstParent, left: null, right: null, value: 14});
+
+    bstParent.setLeftAndRight(left1, right1);
+
+    var left11 = new BSTNode({parent: left1, left: null, right: null, value: 2});
+    var right12 = new BSTNode({parent: left1, left: null, right: null, value: 5});
+
+    left1.setLeftAndRight(left11, right12);
+
+    var left21 = new BSTNode({parent: right1, left: null, right: null, value: 12});
+    var right22 = new BSTNode({parent: right1, left: null, right: null, value: 16});
+
+    right1.setLeftAndRight(left21, right22);
+
+})();
+
+module.exports = {NodeObj: NodeObj, Root: parent, BSTRoot: bstParent};

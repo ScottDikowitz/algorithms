@@ -2,6 +2,7 @@
 
 var NodeObj = require('./nodeObj.js').NodeObj;
 var Root = require('./nodeObj.js').Root;
+var BSTRoot = require('./nodeObj.js').BSTRoot;
 
 // obj merge - shallow
 
@@ -195,14 +196,39 @@ function bfs(target, node){
         current.children.forEach(pushToStack);
     }
     return false;
-
 }
 
+function isBst(node){
+    if (typeof node === 'undefined'){
+        node = BSTRoot;
+    } else if (node === null){
+        return true;
+    }
+    if (!(node.left || node.right)){
+        return true;
+    }
+    // check if left and right exist
+    if (node.left && node.left.value > node.value){
+        return false;
+    }
+
+    if (node.right && node.right.value < node.value){
+        return false;
+    }
+    
+    // check if current nodes is between left and/or right
+    if (!isBst(node.left) || !isBst(node.right)){
+        return false;
+    }
+
+    return true;
+}
 module.exports = {
     merge: mergeObj,
     deepDup: deepDup,
     bubbleSort: bubblesort,
     binarySearch: binarySearch,
     dfs: dfs,
-    bfs: bfs
+    bfs: bfs,
+    isBst: isBst
 };
