@@ -5,7 +5,6 @@ var Root = require('./nodeObj.js').Root;
 var BSTRoot = require('./nodeObj.js').BSTRoot;
 
 // obj merge - shallow
-
 function mergeObj(obj1, obj2){
     if (typeof obj1 === 'undefined'){
         obj1 = {a: 'hello', b:'goodbye'};
@@ -215,7 +214,7 @@ function isBst(node){
     if (node.right && node.right.value < node.value){
         return false;
     }
-    
+
     // check if current nodes is between left and/or right
     if (!isBst(node.left) || !isBst(node.right)){
         return false;
@@ -223,6 +222,52 @@ function isBst(node){
 
     return true;
 }
+
+function sumBst(lvl, node){
+    if (typeof node === 'undefined'){
+        node = BSTRoot;
+    }
+    if (typeof lvl === 'undefined'){
+        lvl = 1;
+    }
+    var i = 0;
+    var stack = [node];
+    var sum = 0;
+    while (stack.length !== 0 || i > lvl){
+        var current = stack.pop();
+
+        if (lvl === i){
+            if (current.left) sum += current.left.value;
+            if (current.right) sum += current.right.value;
+            break;
+        }
+
+        if (current.left) stack.push(current.left);
+        if (current.right) stack.push(current.right);
+        i += 1;
+    }
+
+    return sum;
+}
+
+function addToNine(arr){
+    var numHash = {};
+    arr.forEach(function(num){
+        numHash[num] = true;
+    });
+
+    for (var i = 0; i < arr.length; i++){
+        var curNum = arr[i];
+        var diff = 9 - curNum;
+        if (numHash[diff]){
+            return [curNum, diff];
+        }
+    }
+    return false;
+}
+
+
+console.log(addToNine([5, 2, 1, 4, 15, 4, 8]));
 module.exports = {
     merge: mergeObj,
     deepDup: deepDup,
@@ -230,5 +275,6 @@ module.exports = {
     binarySearch: binarySearch,
     dfs: dfs,
     bfs: bfs,
-    isBst: isBst
+    isBst: isBst,
+    sumBst: sumBst
 };
