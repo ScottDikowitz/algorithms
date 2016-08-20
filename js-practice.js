@@ -265,9 +265,8 @@ function addToNine(arr){
     }
     return false;
 }
+// console.log(addToNine([5, 2, 1, 4, 15, 4, 8]));
 
-
-console.log(addToNine([5, 2, 1, 4, 15, 4, 8]));
 module.exports = {
     merge: mergeObj,
     deepDup: deepDup,

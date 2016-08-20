@@ -38,9 +38,6 @@ console.log('jjfidoeifffheeeugguupp'.compress());
 // var checkPermutations = function(str1, str2){
 //
 // };
-
-
-
 Array.prototype.subsets = function(){
     if (this.length === 0)
         return [[]];
@@ -53,4 +50,24 @@ Array.prototype.subsets = function(){
         return el.concat([lastEl]);
     }));
 
+};
+
+String.prototype.permutations = function(){
+    var permutations = [];
+    if (this.length === 0){
+        permutations.push('');
+        return permutations;
+    }
+
+    var first = this[0];
+    var remainder = this.slice(1);
+    var perms = remainder.permutations();
+    perms.forEach(function(perm){
+        for (var j = 0; j <= perm.length; j++){
+            var copy = perm.substr(0,j) + first + perm.substr(j);
+            permutations.push(copy);
+        }
+    });
+
+    return permutations;
 };
