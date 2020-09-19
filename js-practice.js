@@ -24,6 +24,24 @@ function mergeObj(obj1, obj2){
     return obj3;
 }
 
+// aaaaabbbcdeff
+// [[a, 5], [b, 3], [c, 1], [d, 1], [e, 1], [f, 2]]
+String.prototype.compress = function() {
+    const result = [];
+    let i = 0;
+    while (i < this.length) {
+        const currentChar = this[i]
+        const item = [currentChar, 1]
+        i++;
+        while (currentChar == this[i]) {
+            item[1] = item[1] + 1;
+            i++;
+        }
+        result.push(item)
+    }
+    return result;
+}
+
 // array.flatten
 // [0, 14, 9, 3, 4, [1, 4, 5], 0];
 Array.prototype.flatten = function(){

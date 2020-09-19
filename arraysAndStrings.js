@@ -42,7 +42,6 @@ Array.prototype.subsets = function(){
     if (this.length === 0)
         return [[]];
 
-    var element = this[0];
     var lastEl = this.slice(-1)[0];
     var rec = this.slice(0, -1).subsets();
 
